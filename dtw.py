@@ -13,7 +13,7 @@ def dtw(x, y, dist=lambda a,b: abs(b-a), w=1):
     :param array x: N1*M array
     :param array y: N2*M array
     :param func dist: distance used as cost measure
-    :param int w: percentage of warping allowed each side of the diagonal, e.g. 0 = no warping allowed, 1 = unlimited warping allowed
+    :param int w: percentage of warping allowed each side of the diagonal, e.g. 0 = no warping allowed, 0.10 = 10% warping allowed
     Returns the minimum distance, the cost matrix, the accumulated cost matrix, and the warp path.
     """
     len_x, len_y = len(x), len(y)
