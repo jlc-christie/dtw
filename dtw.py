@@ -10,7 +10,7 @@ def dtw(x, y, dist, warp=1):
     :param array y: N2*M array
     :param func dist: distance used as cost measure
     :param int warp: how many shifts are computed.
-    Returns the minimum distance, the cost matrix, the accumulated cost matrix, and the wrap path.
+    Returns the minimum distance, the cost matrix, the accumulated cost matrix, and the warp path.
     """
     assert len(x)
     assert len(y)
@@ -30,6 +30,7 @@ def dtw(x, y, dist, warp=1):
                 i_k = min(i + k, r - 1)
                 j_k = min(j + k, c - 1)
                 min_list += [D0[i_k, j], D0[i, j_k]]
+
             D1[i, j] += min(min_list)
     if len(x)==1:
         path = zeros(len(y)), range(len(y))
@@ -97,38 +98,3 @@ def _traceback(D):
         p.insert(0, i)
         q.insert(0, j)
     return array(p), array(q)
-
-
-if __name__ == '__main__':
-    if 0:  # 1-D numeric
-        from sklearn.metrics.pairwise import manhattan_distances
-        x = [0, 0, 1, 1, 2, 4, 2, 1, 2, 0]
-        y = [1, 1, 1, 2, 2, 2, 2, 3, 2, 0]
-        dist_fun = manhattan_distances
-    elif 0:  # 2-D numeric
-        from sklearn.metrics.pairwise import euclidean_distances
-        x = [[0, 0], [0, 1], [1, 1], [1, 2], [2, 2], [4, 3], [2, 3], [1, 1], [2, 2], [0, 1]]
-        y = [[1, 0], [1, 1], [1, 1], [2, 1], [4, 3], [4, 3], [2, 3], [3, 1], [1, 2], [1, 0]]
-        dist_fun = euclidean_distances
-    else: # 1-D list of strings
-        from nltk.metrics.distance import edit_distance
-        # x = ['we', 'shelled', 'clams', 'for', 'the', 'chowder']
-        # y = ['class', 'too']
-        x = ['i', 'soon', 'found', 'myself', 'muttering', 'to', 'the', 'walls']
-        y = ['see', 'drown', 'himself']
-        # x = 'we talked about the situation'.split()
-        # y = 'we talked about the situation'.split()
-        dist_fun = edit_distance
-    dist, cost, acc, path = dtw(x, y, dist_fun)
-
-    # Vizualize
-    from matplotlib import pyplot as plt
-    plt.imshow(cost.T, origin='lower', cmap=plt.cm.Reds, interpolation='nearest')
-    plt.plot(path[0], path[1], '-o') # relation
-    plt.xticks(range(len(x)), x)
-    plt.yticks(range(len(y)), y)
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.axis('tight')
-    plt.title('Minimum distance: {}'.format(dist))
-    plt.show()
