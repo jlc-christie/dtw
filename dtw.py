@@ -6,6 +6,10 @@ def dtw(x, y, dist=lambda a,b: abs(b-a), w=1):
     """
     Computes Dynamic Time Warping (DTW) of two sequences.
 
+    Complexity:
+      time  - O(nw)
+      space - O(n^2)
+
     :param array x: N1*M array
     :param array y: N2*M array
     :param func dist: distance used as cost measure
@@ -21,44 +25,32 @@ def dtw(x, y, dist=lambda a,b: abs(b-a), w=1):
     r = int(w*len_x)
     print("r = %d" % r)
 
-    # Calculate (partial) distance matrix
-    D = full((len_x, len_y), inf)
+    # Calculate cost matrix (within bounds, if applicable)
+    cost_matrix = zeros((len_x,len_y))
     for i in range(len_x):
-        D[i, i] = dist(x[i], y[i])
-        for delt in range(r + 1):
-            min_delt = min(i + delt, len_x - 1)
-            D[i + min_delt, i] = dist(x[min_delt], y[i])
-            D[i, i + min_delt] = dist(x[i], y[min_delt])
-    print(D)
+        cost_matrix[i,i] = dist(x[i], y[i])
+        _r = r # temp variable for r if exceeds limits of matrix
+        if i + r >= len_x:
+            _r = len_x - i - 1
+        for delt in range(1, _r + 1):
+            cost_matrix[i + delt,i] = dist(x[i + delt], y[i])
+            cost_matrix[i,i + delt] = dist(x[i], y[i + delt])
 
-    # D0 = zeros((len_x + 1, len_y + 1))
-    # D0[0, 1:] = inf
-    # D0[1:, 0] = inf
-    # D1 = D0[1:, 1:]  # D1 is a reference to a subset of D0, not a copy
-    # for i in range(len_x):
-    #     for j in range(len_y):
-    #         D1[i, j] = dist(x[i], y[j])
-    # cost_matrix = D1.copy()
-    #
-    #
-    # # Note: Change from D0 and D1 in here, where D0[i][j] + warp represents
-    # #       the top-left, top and left cells (where warp=1)
-    # for i in range(len_x):
-    #     for j in range(len_y):
-    #         min_list = [D0[i, j]]
-    #         for k in range(1, warp + 1): # k is confusing, makes it look like a 3rd dimension
-    #             i_k = min(i + k, len_x - 1)
-    #             j_k = min(j + k, len_y - 1)
-    #             min_list += [D0[i_k, j], D0[i, j_k]]
-    #         D1[i, j] += min(min_list)
-    # if len(x)==1:
-    #     path = zeros(len(y)), range(len(y))
-    # elif len(y) == 1:
-    #     path = range(len(x)), zeros(len(x))
-    # else:
-    #     path = _traceback(D0)
-    # return D1[-1, -1] / sum(D1.shape), cost_matrix, D1, path
+    # Matrix to calculate path, at the end it will be the accumulated cost matrix
+    D = full((len_x+1, len_y+1), inf)
+    D[0,0] = 0
+    for i in range(1,len_x+1):
+        for j in range(max(1,i-r), min(len_x+1,i+r+1)):
+            cost = cost_matrix[i-1,j-1]
+            D[i,j] = cost + min(D[i-1,j], D[i,j-1], D[i-1,j-1])
 
+    dist = D[-1,-1]
+    print("Distance = %f" % (D[-1,-1]))
+
+    # Is this path correct? If so, is plot correct?
+    path = _traceback(D)
+
+    return dist, cost_matrix, D, path
 
 def accelerated_dtw(x, y, dist, warp=1):
     """
