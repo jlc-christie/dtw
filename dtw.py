@@ -12,8 +12,9 @@ def dtw(x, y, dist, warp=1):
     :param int warp: how many shifts are computed.
     Returns the minimum distance, the cost matrix, the accumulated cost matrix, and the warp path.
     """
-    assert len(x)
-    assert len(y)
+    assert len(x), "Length of array x cannot be 0"
+    assert len(y), "Length of array y cannot be 0"
+
     r, c = len(x), len(y)
     D0 = zeros((r + 1, c + 1))
     D0[0, 1:] = inf
