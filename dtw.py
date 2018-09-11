@@ -29,7 +29,6 @@ def dtw(x, y, dist=lambda a,b: abs(b-a), w=1):
             min_delt = min(i + delt, len_x - 1)
             D[i + min_delt, i] = dist(x[min_delt], y[i])
             D[i, i + min_delt] = dist(x[i], y[min_delt])
-
     print(D)
 
     # D0 = zeros((len_x + 1, len_y + 1))
