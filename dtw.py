@@ -2,7 +2,7 @@ from numpy import array, zeros, argmin, inf, ndim
 from scipy.spatial.distance import cdist
 
 
-def dtw(x, y, dist, warp=1):
+def dtw(x, y, dist=lambda a,b: abs(b-a), warp=1):
     """
     Computes Dynamic Time Warping (DTW) of two sequences.
 
@@ -12,24 +12,28 @@ def dtw(x, y, dist, warp=1):
     :param int warp: how many shifts are computed.
     Returns the minimum distance, the cost matrix, the accumulated cost matrix, and the warp path.
     """
-    assert len(x), "Length of array x cannot be 0"
-    assert len(y), "Length of array y cannot be 0"
+    len_x, len_y = len(x), len(y)
 
-    r, c = len(x), len(y)
-    D0 = zeros((r + 1, c + 1))
+    assert len_x, "Length of array x cannot be 0"
+    assert len_y, "Length of array y cannot be 0"
+
+    # len_x = r, len_y = c
+
+    D0 = zeros((len_x + 1, len_y + 1))
     D0[0, 1:] = inf
     D0[1:, 0] = inf
-    D1 = D0[1:, 1:]  # view
-    for i in range(r):
-        for j in range(c):
+    D1 = D0[1:, 1:]  # D1 is a reference to a subset of D0, not a copy
+    for i in range(len_x):
+        for j in range(len_y):
             D1[i, j] = dist(x[i], y[j])
-    C = D1.copy()
-    for i in range(r):
-        for j in range(c):
+    print(D0)
+    cost_matrix = D1.copy()
+    for i in range(len_x):
+        for j in range(len_y):
             min_list = [D0[i, j]]
             for k in range(1, warp + 1):
-                i_k = min(i + k, r - 1)
-                j_k = min(j + k, c - 1)
+                i_k = min(i + k, len_x - 1)
+                j_k = min(j + k, len_y - 1)
                 min_list += [D0[i_k, j], D0[i, j_k]]
 
             D1[i, j] += min(min_list)
@@ -39,7 +43,7 @@ def dtw(x, y, dist, warp=1):
         path = range(len(x)), zeros(len(x))
     else:
         path = _traceback(D0)
-    return D1[-1, -1] / sum(D1.shape), C, D1, path
+    return D1[-1, -1] / sum(D1.shape), cost_matrix, D1, path
 
 
 def accelerated_dtw(x, y, dist, warp=1):
