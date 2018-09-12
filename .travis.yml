@@ -17,10 +17,9 @@ script:
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: PYPI_USERNAME
+  user: pierre-rouanet
   password:
     secure: HASHED_PASSWORD (READ DOCS ON TRAVIS CI)
   on:
     tags: true
-    repo:
-    python: 
+    python:
