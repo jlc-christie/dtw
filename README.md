@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/pierre-rouanet/dtw.svg?branch=master)](https://travis-ci.org/pierre-rouanet/dtw)
 
-![An image of two small time series being matched from their warping paths](https://upload.wikimedia.org/wikipedia/commons/a/ab/Dynamic_time_warping.png "Dyanmic Time Warping Example")
+![An image of two small time series being matched from their warping paths](https://upload.wikimedia.org/wikipedia/commons/a/ab/Dynamic_time_warping.png "Dynamic Time Warping Example")
 
 `dtw` is a Dynamic Time Warping (DTW) module in Python. DTW is a way of calculating
 the similarity (or conversely, dissimilarity) between time series data. In brief,
