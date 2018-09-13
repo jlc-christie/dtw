@@ -18,7 +18,14 @@ the error. You can read more on DTW [here](https://en.wikipedia.org/wiki/Dynamic
 
 
 ## Installation
+### With PIP:
+`pip install dtw`
+### Manually:
+1. Obtain Source Code
+  - `git clone https://github.com/jlc-christie/dtw`
 
-```
-pip install dtw
-```
+    **or**
+
+  - Download ZIP from GitHub
+2. Install
+ - `python setup.py install`
