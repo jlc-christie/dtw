@@ -22,10 +22,10 @@ the error. You can read more on DTW [here](https://en.wikipedia.org/wiki/Dynamic
 `pip install dtw`
 ### Manually:
 1. Obtain Source Code
-  - `git clone https://github.com/jlc-christie/dtw`
+    - `git clone https://github.com/jlc-christie/dtw`
 
     **or**
 
-  - Download ZIP from GitHub
+    - Download ZIP from GitHub
 2. Install
- - `python setup.py install`
+    - `python setup.py install`
