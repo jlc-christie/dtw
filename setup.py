@@ -36,7 +36,7 @@ if not VERSION:
     with open(os.path.join(here, NAME, '__version__.py')) as f:
         exec(f.read(), about)
 else:
-about['__version__'] = VERSION
+    about['__version__'] = VERSION
 
 setup(name=NAME,
       version=about['__version__'],
@@ -54,7 +54,7 @@ setup(name=NAME,
             'Programming Language :: Python :: 3',
             'Programming Language :: Python :: 3.6',
         ],
-
-      py_modules=['dtw'],
+      packages=find_packages(exclude=('tests',)),
+      #py_modules=['dtw'],
       test_suite='tests'
       )
