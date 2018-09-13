@@ -22,4 +22,3 @@ deploy:
     secure: HASHED_PASSWORD (READ DOCS ON TRAVIS CI)
   on:
     tags: true
-    python:
